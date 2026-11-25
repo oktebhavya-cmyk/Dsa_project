@@ -1,0 +1,156 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Task {
+    String name;
+    boolean completed;
+
+    Task(String name) {
+        this.name = name;
+        this.completed = false;
+    }
+}
+
+public class TaskListManager {
+
+    static ArrayList<Task> tasks = new ArrayList<>();
+    static Scanner sc = new Scanner(System.in);
+
+    static void addTask() {
+        System.out.print("Enter task name: ");
+        String name = sc.nextLine();
+
+        tasks.add(new Task(name));
+        System.out.println("Task added successfully!");
+    }
+
+    static void viewTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks available.");
+            return;
+        }
+
+        System.out.println("\n--- Task List ---");
+
+        for (int i = 0; i < tasks.size(); i++) {
+            String status = tasks.get(i).completed
+                    ? "Completed"
+                    : "Pending";
+
+            System.out.println((i + 1) + ". "
+                    + tasks.get(i).name + " [" + status + "]");
+        }
+    }
+
+    static void deleteTask() {
+        viewTasks();
+
+        if (tasks.isEmpty()) {
+            return;
+        }
+
+        System.out.print("Enter task number to delete: ");
+        int index = sc.nextInt();
+        sc.nextLine();
+
+        if (index >= 1 && index <= tasks.size()) {
+            tasks.remove(index - 1);
+            System.out.println("Task deleted successfully!");
+        } else {
+            System.out.println("Invalid task number.");
+        }
+    }
+
+    static void completeTask() {
+        viewTasks();
+
+        if (tasks.isEmpty()) {
+            return;
+        }
+
+        System.out.print("Enter task number to complete: ");
+        int index = sc.nextInt();
+        sc.nextLine();
+
+        if (index >= 1 && index <= tasks.size()) {
+            tasks.get(index - 1).completed = true;
+            System.out.println("Task marked as completed!");
+        } else {
+            System.out.println("Invalid task number.");
+        }
+    }
+
+    static void searchTask() {
+        System.out.print("Enter task name to search: ");
+        String search = sc.nextLine();
+
+        boolean found = false;
+
+        for (Task task : tasks) {
+            if (task.name.equalsIgnoreCase(search)) {
+                String status = task.completed
+                        ? "Completed"
+                        : "Pending";
+
+                System.out.println("Task found: "
+                        + task.name + " [" + status + "]");
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Task not found.");
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int choice;
+
+        do {
+            System.out.println("\n===== SIMPLE TASK LIST MANAGER =====");
+            System.out.println("1. Add Task");
+            System.out.println("2. View Tasks");
+            System.out.println("3. Delete Task");
+            System.out.println("4. Mark Task as Completed");
+            System.out.println("5. Search Task");
+            System.out.println("6. Exit");
+
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addTask();
+                    break;
+
+                case 2:
+                    viewTasks();
+                    break;
+
+                case 3:
+                    deleteTask();
+                    break;
+
+                case 4:
+                    completeTask();
+                    break;
+
+                case 5:
+                    searchTask();
+                    break;
+
+                case 6:
+                    System.out.println("Thank you for using Task List Manager!");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+
+        } while (choice != 6);
+
+        sc.close();
+    }
+}
